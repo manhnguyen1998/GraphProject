@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SceneController">
+   <children>
+      <Pane id="side_toolbar" fx:id="side_pane" layoutX="-5.0" prefHeight="400.0" prefWidth="211.0" style="-fx-background-color: #ff8080;">
+         <children>
+            <RadioButton fx:id="dfs_button" layoutX="25.0" layoutY="37.0" mnemonicParsing="false" text="DFS" textFill="WHITE" />
+            <RadioButton fx:id="bfs_button" layoutX="25.0" layoutY="81.0" mnemonicParsing="false" text="BFS" textFill="WHITE" />
+            <RadioButton fx:id="dijistra_button" layoutX="25.0" layoutY="120.0" mnemonicParsing="false" text="Dijistra" textFill="WHITE" />
+            <RadioButton fx:id="add_node_button" layoutX="25.0" layoutY="214.0" mnemonicParsing="false" text="Add Node" textFill="WHITE" />
+            <RadioButton fx:id="add_edge_button" layoutX="25.0" layoutY="278.0" mnemonicParsing="false" text="Add Edge" textFill="WHITE" />
+            <Button fx:id="clear_button" layoutX="98.0" layoutY="12.0" mnemonicParsing="false" text="Clear" />
+            <ImageView fx:id="start_button" fitHeight="17.0" fitWidth="40.0" layoutX="157.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
+             <image>
+                <Image backgroundLoading="true" url="res/play_arrow_black_48x48.png" />
+            </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="201.0" prefHeight="400.0" prefWidth="402.0">
+         <children>
+            <Pane fx:id="canvasGroup" layoutX="-1.0" layoutY="-2.0" prefHeight="410.0" prefWidth="402.0" />
+         </children></Pane>
+   </children>
+</AnchorPane>
