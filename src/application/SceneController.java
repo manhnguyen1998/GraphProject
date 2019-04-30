@@ -3,11 +3,19 @@ package application;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 import java.util.ResourceBundle;
+
+import javax.swing.event.ChangeListener;
 
 import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -16,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
@@ -23,6 +32,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 public class SceneController implements Initializable {
@@ -46,7 +56,32 @@ public class SceneController implements Initializable {
 	private Pane canvasGroup;
 	@FXML
 	private NodeFX nodeList;
+	
+	List<NodeFX> circles = new ArrayList<>();
+    List<Edge> mstEdges = new ArrayList<>(), realEdges = new ArrayList<>();
+    List<Shape> edges = new ArrayList<>();
 	ToggleGroup toggleGroup = new ToggleGroup();
+	
+	
+	// event handler for add node
+	EventType<MouseEvent> mousePress = MouseEvent.MOUSE_PRESSED;
+	EventHandler<MouseEvent> addNode = new EventHandler<MouseEvent>() {
+	    @Override
+	    public void handle(MouseEvent mouseEvent) {
+	        System.out.println("mouse click detected! " + mouseEvent.getSource());
+	        
+               NodeFX circle = new NodeFX(mouseEvent.getX(), mouseEvent.getY(), 1.2, String.valueOf("1"));
+//               circle.setRadius(10.0f);
+               ScaleTransition tr = new ScaleTransition(Duration.millis(100), circle);
+               tr.setByX(10f);
+               tr.setByY(10f);
+               tr.setInterpolator(Interpolator.EASE_OUT);
+               tr.play();
+           canvasGroup.getChildren().add(circle);
+	    }
+	};
+	
+	// event hanlder for add edge
 	
 	 @Override
 	    public void initialize(URL url, ResourceBundle rb) {
@@ -55,18 +90,43 @@ public class SceneController implements Initializable {
 		 dijistra_button.setToggleGroup(toggleGroup);
 		 add_node_button.setToggleGroup(toggleGroup);
 		 add_edge_button.setToggleGroup(toggleGroup);
-		 canvasGroup.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			    @Override
-			    public void handle(MouseEvent mouseEvent) {
-			        System.out.println("mouse click detected! " + mouseEvent.getSource());
-			        
-                       NodeFX circle = new NodeFX(mouseEvent.getX(), mouseEvent.getY(), 1.2, String.valueOf("1"));
-                       circle.setRadius(50.0f);
-                   canvasGroup.getChildren().add(circle);
-			    }
-			    
-			    
-			});
+		
+		 
+		 // add listener for radio group button
+		 toggleGroup.selectedToggleProperty().addListener(new InvalidationListener() {
+			 public void invalidated(javafx.beans.Observable ov) {
+		            if (dfs_button.isSelected()) {
+		            	//remove all event of addNode and addEdge
+		            	canvasGroup.removeEventFilter(mousePress, addNode);
+		                System.out.println("dfs clicked");
+		            }
+		            if (bfs_button.isSelected()) {
+		            	//remove all event of addNode and addEdge
+		            	canvasGroup.removeEventFilter(mousePress, addNode);
+		                System.out.println("dfs clicked");
+		            }
+		            if (dijistra_button.isSelected()) {
+		            	//remove all event of addNode and addEdge
+		            	canvasGroup.removeEventFilter(mousePress, addNode);
+		                System.out.println("dfs clicked");
+		            }
+		            if (add_node_button.isSelected()) {
+		            	//remove all event of addNode and addEdge
+		                System.out.println("add node clicked");
+		                canvasGroup.addEventFilter(mousePress, addNode);
+		            }
+		            if (add_edge_button.isSelected()) {
+		            	//remove all event of addNode and addEdge
+		            	canvasGroup.removeEventFilter(mousePress, addNode);
+		                System.out.println("dfs clicked");
+		            }
+		        }
+
+			
+		    });
+
+		
+		
 	 }
 	 
 	 
@@ -100,13 +160,16 @@ public class SceneController implements Initializable {
 	
 	 
 	 
-	 class HitTestAdapter extends MouseAdapter { 
-	        public void mousePressed(MouseEvent e) { 
-	            double x = e.getX(); 
-	            double y = e.getY(); 
-	            System.out.println("clicked "+ x+ "clicked "+ y);
-	        } 
-	 }
+//	 boolean edgeExists(NodeFX u, NodeFX v) {
+//	        for (Edge e : realEdges) {
+//	            if (e.source == u.node && e.target == v.node) {
+//	                return true;
+//	            }
+//	        }
+//	        return false;
+//	    }
+//	 
+	 
 	 public class NodeFX extends Circle {
 
 	        Node node;
